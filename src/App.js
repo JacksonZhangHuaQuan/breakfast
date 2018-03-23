@@ -45,9 +45,8 @@ class App extends Component {
       shapes: 100,
       maxSize: 15,
       minSize: 5,
-      padding: 50,
-      running: false,
-      innerPadding: 50,
+      padding: 65,
+      running: false
     }
   }
 
@@ -70,10 +69,8 @@ class App extends Component {
     if (width < 500) {
       settings.height = width
       settings.padding = 0
-      settings.innerPadding = 15
     } else {
-      settings.padding = 50
-      settings.innerPadding = settings.padding
+      settings.padding = 65
     }
 
     this.setState(settings)
@@ -201,14 +198,6 @@ class App extends Component {
     }
   }
 
-  getInnerHeight () {
-    return this.getActualHeight() - 2*this.state.innerPadding
-  }
-
-  getInnerWidth () {
-    return this.getActualWidth() - 2*this.state.innerPadding
-  }
-
   generateGriddles () {
     const griddles = []
 
@@ -318,14 +307,14 @@ class App extends Component {
               <clipPath id={"clip"}>
                 <rect x={0} y={0} width={"100%"} height={"100%"} />
               </clipPath>
-              <filter xmlns="http://www.w3.org/2000/svg" id="f4" height="130%">
+              <filter id="f4" height="130%">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="3"/> 
                 <feOffset dx="2" dy="2" result="offsetblur"/>
                 <feComponentTransfer>
                   <feFuncA type="linear" slope="0.4"/>
                 </feComponentTransfer>
                 <feMerge> 
-                  <feMergeNode/>
+                  <feMergeNode />
                   <feMergeNode in="SourceGraphic"/> 
                 </feMerge>
               </filter>
