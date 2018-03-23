@@ -39,6 +39,8 @@ class App extends Component {
       columns: 4,
       rows: 25,
       shapes: 100,
+      maxSize: 15,
+      minSize: 5,
       padding: 50,
       running: false,
       innerPadding: 50,
@@ -90,12 +92,12 @@ class App extends Component {
     mc.get('pinch').set({ enable: true })
 
     
-     mc.on("swipedown", ev => this.decrementRows())
-      .on("swipeup", ev => this.incrementRows())
-      .on("swipeleft", ev => this.decrementColumns())
-      .on("swiperight", ev => this.incrementColumns())
-      .on("pinchin", ev => { this.incrementRows(); this.incrementColumns();  } )
-      .on("pinchout", ev => { this.decrementRows(); this.decrementColumns();  })
+     mc.on("swipedown", ev => this.decrementShapes())
+      .on("swipeup", ev => this.incrementShapes())
+      .on("swipeleft", ev => this.decrementSize())
+      .on("swiperight", ev => this.incrementSize())
+      .on("pinchin", ev => { this.incrementShapes(); this.incrementSize(); } )
+      .on("pinchout", ev => { this.decrementShapes(); this.decrementSize(); })
   }
 
   handleKeydown (ev) {
@@ -128,30 +130,30 @@ class App extends Component {
       //this.decrementTreeWidth()
     } else if (ev.which === 37) {
       ev.preventDefault()
-      this.decrementColumns()
+      this.decrementSize()
     } else if (ev.which === 39 && (ev.metaKey || ev.ctrlKey)) {
       ev.preventDefault()
       //this.incrementTreeWidth()
     } else if (ev.which === 39) {
       ev.preventDefault()
-      this.incrementColumns()
+      this.incrementSize()
     }
   }
 
   incrementShapes () {
-    this.setState({shapes: Math.min(100, this.state.shapes + 1)})
+    this.setState({shapes: Math.min(150, this.state.shapes + 1)})
   }
 
   decrementShapes () {
-    this.setState({shapes: Math.max(3, this.state.shapes - 1)})
+    this.setState({shapes: Math.max(1, this.state.shapes - 1)})
   }
 
-  incrementColumns () {
-    this.setState({columns: Math.min(10, this.state.columns + 1) })
+  incrementSize () {
+    this.setState({maxSize: Math.min(25, this.state.maxSize + 1)})
   }
 
-  decrementColumns () {
-    this.setState({columns: Math.max(1, this.state.columns - 1) })
+  decrementSize () {
+    this.setState({maxSize: Math.max(15, this.state.maxSize - 1)})
   }
 
   handleSave () {
@@ -215,7 +217,7 @@ class App extends Component {
 
   generateGriddle () {
     const minDimension = Math.min(this.getActualHeight(), this.getActualWidth())
-    const griddleDimension = this.between(5, 15) * minDimension/100
+    const griddleDimension = this.between(this.state.minSize, this.state.maxSize) * minDimension/100
     const isLightBackground = Math.random() > 0.4
 
     const x = this.between(-griddleDimension, this.getActualWidth())
@@ -225,6 +227,7 @@ class App extends Component {
     const stripeColor = isLightBackground ? this.state.darkStripColor : this.state.lightStripColor
 
     const numberofSections = this.between(3,6) * 2
+
     const split = this.between(10, 50)/100
 
     const sectionWidth = griddleDimension/numberofSections
@@ -260,7 +263,7 @@ class App extends Component {
 
   generateEgg () {
     const minDimension = Math.min(this.getActualHeight(), this.getActualWidth())
-    const eggDimension = this.between(5, 10) * minDimension/100
+    const eggDimension = this.between(this.state.minSize*0.9, this.state.maxSize*0.9) * minDimension/100
 
     const x = this.between(0, this.getActualWidth())
     const y = this.between(0, this.getActualHeight())
@@ -270,8 +273,6 @@ class App extends Component {
         <circle cx={x} cy={y} r={eggDimension/2} fill={['green', 'blue', 'yellow', 'red', 'white', 'black'][Math.floor(Math.random() * 6)]} />
       </g>
     )
-
-
   }
 
   render() {
