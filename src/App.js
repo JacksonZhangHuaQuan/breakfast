@@ -36,8 +36,12 @@ class App extends Component {
       backgroundColor: colorSet.backgroundColor,
       darkStripColor: colorSet.darkStripColor,
       lightStripColor: colorSet.lightStripColor,
-      columns: 4,
-      rows: 25,
+      blueColor: 'rgb(2, 106, 171)',
+      yellowColor: 'rgb(218,211,1)',
+      whiteColor: 'rgb(243, 224, 218)',
+      blackColor: 'rgb(29, 47, 47)',
+      redColor: 'rgb(214, 86, 52)',
+      greenColor: 'rgb(0, 145, 80)',
       shapes: 100,
       maxSize: 15,
       minSize: 5,
@@ -96,8 +100,8 @@ class App extends Component {
       .on("swipeup", ev => this.incrementShapes())
       .on("swipeleft", ev => this.decrementSize())
       .on("swiperight", ev => this.incrementSize())
-      .on("pinchin", ev => { this.incrementShapes(); this.decrementSize(); } )
-      .on("pinchout", ev => { this.decrementShapes(); this.incrementSize(); })
+      .on("pinchin", ev => { this.decrementSize(); } )
+      .on("pinchout", ev => { this.incrementSize(); })
   }
 
   handleKeydown (ev) {
@@ -209,13 +213,13 @@ class App extends Component {
     const griddles = []
 
     for (let i=0; i < this.state.shapes; i++) {
-      griddles.push(this.generateGriddle())
+      griddles.push(this.generateGriddle(i))
     }
 
     return griddles
   }
 
-  generateGriddle () {
+  generateGriddle (key) {
     const minDimension = Math.min(this.getActualHeight(), this.getActualWidth())
     const griddleDimension = this.between(this.state.minSize, this.state.maxSize) * minDimension/100
     const isLightBackground = Math.random() > 0.4
@@ -236,12 +240,12 @@ class App extends Component {
 
 
     for (let i = 0; i < numberofSections; i++) {
-      griddleLines.push(<rect x={x} y={y+i*sectionWidth} width={griddleDimension} height={sectionWidth*split} fill={stripeColor} />)
+      griddleLines.push(<rect key={i} x={x} y={y+i*sectionWidth} width={griddleDimension} height={sectionWidth*split} fill={stripeColor} />)
     }
 
 
     return (
-      <g filter="url(#f4)">
+      <g key={key} filter="url(#f4)">
       <g transform={`rotate(${this.between(0, 360)} ${x+griddleDimension/2} ${y + griddleDimension/2})`}>
         <rect x={x} y={y}
                   width={griddleDimension} height={griddleDimension} fill={bgColor} />
@@ -255,13 +259,13 @@ class App extends Component {
     const eggs = []
 
     for (let i=0; i < this.state.shapes/4; i++) {
-      eggs.push(this.generateEgg())
+      eggs.push(this.generateEgg(i))
     }
 
     return eggs
   }
 
-  generateEgg () {
+  generateEgg (key) {
     const minDimension = Math.min(this.getActualHeight(), this.getActualWidth())
     const eggDimension = this.between(this.state.minSize*0.75, this.state.maxSize*0.75) * minDimension/100
 
@@ -269,8 +273,10 @@ class App extends Component {
     const y = this.between(0, this.getActualHeight())
 
     return (
-      <g filter="url(#f4)">
-        <circle cx={x} cy={y} r={eggDimension/2} fill={['green', 'blue', 'yellow', 'red', 'white', 'black'][Math.floor(Math.random() * 6)]} />
+      <g key={key} filter="url(#f4)">
+        <circle cx={x} cy={y} r={eggDimension/2} fill={
+          [this.state.greenColor, this.state.blueColor, this.state.yellowColor, this.state.redColor, this.state.whiteColor, this.state.blackColor][Math.floor(Math.random() * 6)]
+        } />
       </g>
     )
   }
@@ -289,6 +295,20 @@ class App extends Component {
             handleChange={ (color) => this.setState({darkStripColor: color.hex}) } />
           <ColorPicker color={tinycolor(this.state.lightStripColor).toRgb()} disableAlpha={true}
             handleChange={ (color) => this.setState({lightStripColor: color.hex}) } />
+          <div className='no-mobile'>
+            <ColorPicker color={tinycolor(this.state.yellowColor).toRgb()} disableAlpha={true}
+              handleChange={ (color) => this.setState({yellowColor: color.hex}) } />
+            <ColorPicker color={tinycolor(this.state.greenColor).toRgb()} disableAlpha={true}
+              handleChange={ (color) => this.setState({greenColor: color.hex}) } />
+            <ColorPicker color={tinycolor(this.state.blueColor).toRgb()} disableAlpha={true}
+              handleChange={ (color) => this.setState({blueColor: color.hex}) } />
+            <ColorPicker color={tinycolor(this.state.redColor).toRgb()} disableAlpha={true}
+              handleChange={ (color) => this.setState({redColor: color.hex}) } />
+            <ColorPicker color={tinycolor(this.state.whiteColor).toRgb()} disableAlpha={true}
+              handleChange={ (color) => this.setState({whiteColor: color.hex}) } />
+            <ColorPicker color={tinycolor(this.state.blackColor).toRgb()} disableAlpha={true}
+              handleChange={ (color) => this.setState({blackColor: color.hex}) } />
+          </div>
             </div> : null
         }
 
@@ -302,7 +322,7 @@ class App extends Component {
                 <feGaussianBlur in="SourceAlpha" stdDeviation="3"/> 
                 <feOffset dx="2" dy="2" result="offsetblur"/>
                 <feComponentTransfer>
-                  <feFuncA type="linear" slope="0.3"/>
+                  <feFuncA type="linear" slope="0.4"/>
                 </feComponentTransfer>
                 <feMerge> 
                   <feMergeNode/>
