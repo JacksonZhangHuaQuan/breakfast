@@ -263,7 +263,7 @@ class App extends Component {
 
   generateEgg () {
     const minDimension = Math.min(this.getActualHeight(), this.getActualWidth())
-    const eggDimension = this.between(this.state.minSize*0.9, this.state.maxSize*0.9) * minDimension/100
+    const eggDimension = this.between(this.state.minSize*0.75, this.state.maxSize*0.75) * minDimension/100
 
     const x = this.between(0, this.getActualWidth())
     const y = this.between(0, this.getActualHeight())
