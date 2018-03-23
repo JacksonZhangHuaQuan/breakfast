@@ -145,11 +145,11 @@ class App extends Component {
   }
 
   incrementShapes () {
-    this.setState({shapes: Math.min(150, this.state.shapes + 1)})
+    this.setState({shapes: Math.min(120, this.state.shapes + 2)})
   }
 
   decrementShapes () {
-    this.setState({shapes: Math.max(1, this.state.shapes - 1)})
+    this.setState({shapes: Math.max(2, this.state.shapes - 2)})
   }
 
   incrementSize () {
