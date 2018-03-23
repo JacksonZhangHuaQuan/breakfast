@@ -96,8 +96,8 @@ class App extends Component {
       .on("swipeup", ev => this.incrementShapes())
       .on("swipeleft", ev => this.decrementSize())
       .on("swiperight", ev => this.incrementSize())
-      .on("pinchin", ev => { this.incrementShapes(); this.incrementSize(); } )
-      .on("pinchout", ev => { this.decrementShapes(); this.decrementSize(); })
+      .on("pinchin", ev => { this.incrementShapes(); this.decrementSize(); } )
+      .on("pinchout", ev => { this.decrementShapes(); this.incrementSize(); })
   }
 
   handleKeydown (ev) {
